@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1>Registration Form</h1>
+    </header>
+
+    <main>
+        <form id="registrationForm" action="#" method="POST" novalidate>
+
+            <div class="form-group">
+                <label for="fullname">Full Name:</label>
+                <input type="text" id="fullname" name="fullname" required>
+                <div id="fullnameError" class="error"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address:</label>
+                <input type="email" id="email" name="email" required>
+                <div id="emailError" class="error"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+                <div id="passwordError" class="error"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="confirm_password">Confirm Password:</label>
+                <input type="password" id="confirm_password" name="confirm_password" required>
+                <div id="confirmError" class="error"></div>
+            </div>
+
+            <div class="form-group">
+                <label>Gender:</label>
+                <div class="gender-options">
+                    <label><input type="radio" name="gender" value="male"> Male</label>
+                    <label><input type="radio" name="gender" value="female"> Female</label>
+                    <label><input type="radio" name="gender" value="other"> Other</label>
+                </div>
+                <div id="genderError" class="error"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="dob">Date of Birth:</label>
+                <input type="text" id="dob" name="dob" placeholder="yyyy-mm-dd" required>
+                <div id="dobError" class="error"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="country">Country:</label>
+                <select id="country" name="country" required>
+                    <option value="">-- Select Country --</option>
+                    <option value="philippines">Philippines</option>
+                    <option value="korea">Korea</option>
+                    <option value="japan">Japan</option>
+                    <option value="australia">Australia</option>
+                    <option value="us">United States</option>
+                </select>
+                <div id="countryError" class="error"></div>
+            </div>
+
+            <div class="form-group terms-group">
+                <label>
+                    <input type="checkbox" id="terms" name="terms"> I agree to the 
+                    <a href="tc.html" target="_blank"> Terms & Conditions</a>
+                </label>
+                <div id="termsError" class="error"></div>
+            </div>
+
+            <button type="submit">Register</button>
+
+        </form>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Registration System.KLVC</p>
+    </footer>
+
+    <script>
+        function validateFullname() {
+            const name = document.getElementById('fullname').value.trim();
+            const error = document.getElementById('fullnameError');
+            if (name.length < 3) {
+                error.textContent = "Name must be at least 3 characters.";
+                error.style.display = "block";
+                return false;
+            }
+            error.style.display = "none";
+            return true;
+        }
+
+        function validateEmail() {
+            const email = document.getElementById('email').value.trim();
+            const error = document.getElementById('emailError');
+            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!regex.test(email)) {
+                error.textContent = "Invalid email format.";
+                error.style.display = "block";
+                return false;
+            }
+            error.style.display = "none";
+            return true;
+        }
+
+        function validatePassword() {
+            const password = document.getElementById('password').value;
+            const error = document.getElementById('passwordError');
+            const regex = /^(?=.*[0-9])(?=.*[\W_]).{8,}$/;
+            if (!regex.test(password)) {
+                error.textContent = "Password must be 8+ chars with number & special character.";
+                error.style.display = "block";
+                return false;
+            }
+            error.style.display = "none";
+            return true;
+        }
+
+        function validatePasswordMatch() {
+            const password = document.getElementById('password').value;
+            const confirm = document.getElementById('confirm_password').value;
+            const error = document.getElementById('confirmError');
+            if (password !== confirm) {
+                error.textContent = "Passwords do not match.";
+                error.style.display = "block";
+                return false;
+            }
+            error.style.display = "none";
+            return true;
+        }
+
+        function validateGender() {
+            const genders = document.getElementsByName('gender');
+            const error = document.getElementById('genderError');
+            let checked = false;
+            genders.forEach(g => { if (g.checked) checked = true; });
+            if (!checked) {
+                error.textContent = "Please select a gender.";
+                error.style.display = "block";
+                return false;
+            }
+            error.style.display = "none";
+            return true;
+        }
+
+        function validateDOB() {
+            const dobValue = document.getElementById('dob').value;
+            const error = document.getElementById('dobError');
+            const regex = /^\d{4}-\d{2}-\d{2}$/;
+            if (!regex.test(dobValue)) {
+                error.textContent = "Invalid format! Use yyyy-mm-dd.";
+                error.style.display = "block";
+                return false;
+            }
+            const dob = new Date(dobValue);
+            const today = new Date();
+            let age = today.getFullYear() - dob.getFullYear();
+            if (today.getMonth() < dob.getMonth() || 
+                (today.getMonth() === dob.getMonth() && today.getDate() < dob.getDate())) {
+                age--;
+            }
+            if (age < 18) {
+                error.textContent = "You must be at least 18 years old.";
+                error.style.display = "block";
+                return false;
+            }
+            error.style.display = "none";
+            return true;
+        }
+
+        function validateCountry() {
+            const country = document.getElementById('country').value;
+            const error = document.getElementById('countryError');
+            if (country === "") {
+                error.textContent = "Please select a country.";
+                error.style.display = "block";
+                return false;
+            }
+            error.style.display = "none";
+            return true;
+        }
+
+        function validateTerms() {
+            const terms = document.getElementById('terms');
+            const error = document.getElementById('termsError');
+            if (!terms.checked) {
+                error.textContent = "You must agree to the Terms & Conditions.";
+                error.style.display = "block";
+                return false;
+            }
+            error.style.display = "none";
+            return true;
+        }
+
+        function validateForm(event) {
+            let valid = true;
+            if (!validateFullname()) valid = false;
+            if (!validateEmail()) valid = false;
+            if (!validatePassword()) valid = false;
+            if (!validatePasswordMatch()) valid = false;
+            if (!validateGender()) valid = false;
+            if (!validateDOB()) valid = false;
+            if (!validateCountry()) valid = false;
+            if (!validateTerms()) valid = false;
+
+            if (!valid) event.preventDefault();
+        }
+
+        document.getElementById('registrationForm').addEventListener('submit', validateForm);
+    </script>
+
+</body>
+</html>
